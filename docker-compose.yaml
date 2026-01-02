@@ -1,0 +1,66 @@
+services:
+  ai-tool:
+    build: 
+     context: .
+     dockerfile: Dockerfile
+    container_name: Kohya-ss
+
+    # Required for GBU access outside the Docker Swarm mode
+    runtime: nvidia
+    
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    # Prevents CUDA / PyTorch shared memory crashes
+    shm_size: "2gb"
+
+  # GPU configuration
+    environment:
+      CUDA_VISIBLE_DEVICES: "0"
+      TORCH_CUDA_ARCH_LIST: "9.0"  # Architecture for RTX 50xx / Blackwell
+      CUDA_MODULE_LOADING: "LAZY"
+      NVIDIA_VISIBLE_DEVICES: "all"
+      NVIDIA_DRIVER_CAPABILITIES: "compute,utility"
+      TF_CPP_MIN_LOG_LEVEL: "2"
+      ACCELERATE_CONFIG_FILE: "/app/accelerate_config.yaml"
+
+    # Port for GUI / web UI
+    ports:
+      - "7860:7860"
+  
+    volumes:
+    # accelerate_config
+      - ./accelerate_config.yaml:/app/accelerate_config.yaml
+    
+    # X11 (optional – only if you use GUI forwarding)
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      
+     # Application data
+      - ./models:/app/models
+      - ./dataset/source:/dataset
+      - ./dataset/images:/app/data
+      - ./dataset/logs:/app/logs
+      - ./dataset/outputs:/app/outputs
+      - ./dataset/regularization:/app/regularization
+      
+     # Cache mounts (important for performance) 
+      - ./.cache/config:/app/config
+      - ./.cache/user:/home/1000/.cache
+      - ./.cache/triton:/home/1000/.triton
+      - ./.cache/nv:/home/1000/.nv
+      - ./.cache/keras:/home/1000/.keras
+      - ./.cache/config:/home/1000/.config 
+    
+   # Prevents file-descriptor exhaustion in heavy training
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      stack: 67108864
+      
+    tty: true
+    stdin_open: true

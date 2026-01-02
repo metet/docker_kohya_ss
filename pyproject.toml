@@ -1,0 +1,25 @@
+[project]
+name = "ai-template-stable"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "torch",
+    "torchvision",
+    "torchaudio",
+]
+
+[tool.uv]
+# Forces uv to look for Linux-specific wheels
+required-environments = [
+    "sys_platform == 'linux' and platform_machine == 'x86_64'"
+]
+
+[[tool.uv.index]]
+name = "pytorch-stable"
+url = "https://download.pytorch.org/whl/cu130"
+explicit = true
+
+[tool.uv.sources]
+torch = { index = "pytorch-stable" }
+torchvision = { index = "pytorch-stable" }
+torchaudio = { index = "pytorch-stable" }

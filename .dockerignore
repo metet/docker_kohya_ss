@@ -1,0 +1,42 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.eggs/
+
+# Virtual environments
+.venv/
+
+# uv / pip caches
+.cache/
+pip-cache/
+uv-cache/
+
+
+# Datasets & models
+dataset/
+models/
+checkpoints/
+loras/
+controlnet/
+output/
+input/
+temp/
+.cache/
+
+# Logs & outputs
+logs/
+outputs/
+*.log
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
