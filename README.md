@@ -1,5 +1,5 @@
 
-# Geforce 5080
+# Docker setup to run Kohya-ss with Geforce 5080
 
 This repository contains a Dockerized setup for running **Kohya-ss** with PyTorch + CUDA 13.0 support.
 
@@ -142,4 +142,5 @@ git push origin main
 If you want, I can also **write a minimal `.github/workflows/docker-build.yml`** so GitHub automatically builds the Docker image on each push — this is great for CI/CD.
 
 Do you want me to do that?
+
 
