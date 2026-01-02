@@ -110,37 +110,10 @@ Ensure `docker-compose.yaml` has proper GPU access (`runtime: nvidia` or `--gpus
 
 ## License
 
-MIT / your choice
+MIT 
 
-````
 
----
 
-# Step 5: Add, commit, and push README
 
-```bash
-git add README.md
-git commit -m "Add README with Docker instructions"
-git push origin main
-````
-
----
-
-# ✅ Summary
-
-* Initialize Git locally
-* Create GitHub repo and link remote
-* Add `README.md` with:
-
-  * Build instructions
-  * Run / stop instructions
-  * Notes about GPU and caching
-* Push everything to GitHub
-
----
-
-If you want, I can also **write a minimal `.github/workflows/docker-build.yml`** so GitHub automatically builds the Docker image on each push — this is great for CI/CD.
-
-Do you want me to do that?
 
 
