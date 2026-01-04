@@ -1,0 +1,33 @@
+# JetBrains IDEs
+.idea/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Cache
+.cache/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Data directories
+dataset/
+models/
+checkpoints/
+loras/
+controlnet/
+output/
+outputs/
+logs/
