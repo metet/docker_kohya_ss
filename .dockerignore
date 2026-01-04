@@ -28,7 +28,6 @@ controlnet/
 output/
 input/
 temp/
-.cache/
 
 # Logs & outputs
 logs/
