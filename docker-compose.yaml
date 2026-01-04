@@ -1,8 +1,8 @@
 services:
   ai-tool:
     build:
-     context: .
-     dockerfile: Dockerfile
+      context: .
+      dockerfile: Dockerfile
     container_name: Kohya-ss
     # Required for GPU access outside the Docker Swarm mode
     runtime: nvidia
@@ -28,18 +28,18 @@ services:
     ports:
       - "7860:7860"
     volumes:
-    # accelerate_config
+      # accelerate_config
       - ./accelerate_config.yaml:/app/accelerate_config.yaml
-    # X11 (optional – only if you use GUI forwarding)
+      # X11 (optional – only if you use GUI forwarding)
       - /tmp/.X11-unix:/tmp/.X11-unix
-     # Application data
+      # Application data
       - ./models:/app/models
       - ./dataset/source:/dataset
       - ./dataset/images:/app/data
       - ./dataset/logs:/app/logs
       - ./dataset/outputs:/app/outputs
       - ./dataset/regularization:/app/regularization
-     # Cache mounts (important for performance) 
+      # Cache mounts (important for performance)
       - ./.cache/config:/app/config
       - ./.cache/user:/home/1000/.cache
       - ./.cache/triton:/home/1000/.triton
