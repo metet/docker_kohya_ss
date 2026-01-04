@@ -1,5 +1,4 @@
-
-# Docker setup to run Kohya-ss with Geforce 5080
+# Docker setup to run Kohya-ss with GeForce 5080
 
 This repository contains a Dockerized setup for running **Kohya-ss** with PyTorch + CUDA 13.0 support.
 
@@ -8,109 +7,54 @@ This repository contains a Dockerized setup for running **Kohya-ss** with PyTorc
 ## Requirements
 
 - Docker >= 23.x
-- NVIDIA Container Toolkit (`nvidia-docker2`) if using GPU
+- Docker Compose
+- NVIDIA Container Toolkit (`nvidia-docker2`)
+- NVIDIA drivers on the host
 - Linux x86_64 (for CUDA wheels)
-- Optional: Docker Compose for multi-service setups
 
 ---
 
 ## Getting Started
 
-### 1. Build the Docker image (first time)
-
-```bash
-# Enable BuildKit for faster caching
-DOCKER_BUILDKIT=1 docker build -t ai-tool .
-````
-
-* This will install all dependencies defined in `pyproject.toml` and `uv.lock`
-* The `.venv` is created inside the image, so no host setup is required
-* This may take a few minutes on first build
-
----
-
-### 2. Run the container (first time)
-
-```bash
-docker run -it --rm \
-  --gpus all \
-  -p 7860:7860 \
-  -v /tmp/.X11-unix:/tmp/.X11-unix \
-  -v ./models:/app/models \
-  -v ./dataset/source:/dataset \
-  -v ./dataset/images:/app/data \
-  -v ./dataset/logs:/app/logs \
-  -v ./dataset/outputs:/app/outputs \
-  -v ./dataset/regularization:/app/regularization \
-  ai-tool
-```
-
-* The `--gpus all` flag exposes all NVIDIA GPUs to the container
-* Replace `/dataset` and `/models` paths if needed
-* This will launch **Kohya-ss GUI** at `http://0.0.0.0:7860`
-
----
-
-### 3. Stop the container
-
-If running in the foreground, press `CTRL+C` to stop.
-If running detached:
-
-```bash
-docker ps         # find container ID
-docker stop <id>
-```
-
----
-
-### 4. Run the container in the future
-
-```bash
-docker run -it --rm \
-  --gpus all \
-  -p 7860:7860 \
-  -v /tmp/.X11-unix:/tmp/.X11-unix \
-  -v ./models:/app/models \
-  -v ./dataset/source:/dataset \
-  -v ./dataset/images:/app/data \
-  -v ./dataset/logs:/app/logs \
-  -v ./dataset/outputs:/app/outputs \
-  -v ./dataset/regularization:/app/regularization \
-  ai-tool
-```
-
-> Since dependencies are already built in the image, this will be much faster than the first build.
-
----
-
-## Notes
-
-* The Dockerfile uses **multi-stage build**:
-
-  * Builder stage installs dependencies via `uv` and lockfile
-  * Runtime stage copies `.venv` and the app, resulting in a smaller image
-* GPU support requires NVIDIA drivers on the host
-* `TORCH_CUDA_ARCH_LIST=9.0` targets RTX 5080 / Blackwell GPUs
-* Logs and cache are mounted to `.cache` folders for performance
-
----
-
-## Optional: Docker Compose
-
-If using Docker Compose:
+### 1. Start the container
 
 ```bash
 docker compose up
+```
+
+* This will build the image (first time only) and start the container
+* The build installs all dependencies from `pyproject.toml` and `uv.lock`
+* The Kohya-ss GUI will be available at `http://localhost:7860`
+
+### 2. Stop the container
+
+```bash
 docker compose down
 ```
 
-Ensure `docker-compose.yaml` has proper GPU access (`runtime: nvidia` or `--gpus all`).
+Or press `CTRL+C` if running in the foreground.
+
+---
+
+## Configuration
+
+The `docker-compose.yaml` includes:
+
+* **GPU Access**: `runtime: nvidia` with all GPUs exposed
+* **CUDA Architecture**: `TORCH_CUDA_ARCH_LIST=9.0` targets RTX 5080 / Blackwell GPUs
+* **Shared Memory**: `shm_size: 2gb` prevents CUDA crashes
+* **Port Mapping**: Port 7860 for web UI
+* **Volume Mounts**:
+  * `./models` → Model storage
+  * `./dataset/source` → Source datasets
+  * `./dataset/images`, `./dataset/logs`, `./dataset/outputs` → Training data
+  * `./.cache` → Performance caching
 
 ---
 
 ## License
 
-MIT 
+See [LICENSE](LICENSE) file for details. 
 
 
 
