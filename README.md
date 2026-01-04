@@ -19,6 +19,7 @@ This repository contains a Dockerized setup for running **Kohya-ss** with PyTorc
 ```bash
 git clone https://github.com/metet/docker_kohya_ss.git
 cd docker_kohya_ss
+git clone --recurse-submodules https://github.com/bmaltais/kohya_ss.git
 ```
 
 ---
